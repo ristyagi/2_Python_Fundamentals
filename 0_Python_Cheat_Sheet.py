@@ -1,5 +1,5 @@
 ## This Python cheat sheet is used as a go-to guide for frequently used piece of codes
-
+## by - ristyagi@gmail.com
 
 import pandas as pd
 pd.set_option('display.max_columns', None)  # pandas setting to force terminal to display all columns of dataframe
