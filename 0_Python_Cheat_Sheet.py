@@ -72,6 +72,72 @@ nba['Team'].value_counts()
 nba['Position'].value_counts(normalize=True) * 100 # this gives the percentages each value is part of the total values
 
 
+# Filtering data in dataframe 
+
+pd.to_datetime(emp['Start Date'], format = '%m/%d/%Y') # format here is the format of existing date, so that pandas do no confuse month with day while converting.
+
+pd.to_datetime(emp['Last Login Time'], format = '%H:%M %p') # since explicit date was not there, pandas automatically added default date, %p is used to specify am/pm value
+
+pd.to_datetime(emp['Last Login Time'], format = '%H:%M %p').dt.time # dt.time object gives time component only
+
+emp['Senior Management'] = emp['Senior Management'].astype('bool') # this converted NaN values as TRUE, which is not right
+
+emp['Gender'] = emp['Gender'].astype('category') # this do not force change Nan to anything, keeps them as NaN
+
+# directly reading csv and parse dates
+emp = pd.read_csv("pandas/Complete/employees.csv", parse_dates = ['Start Date'], date_format = '%m/%d/%Y')
+
+emp[emp['Gender'] == 'Male'] # this will pull out only those df rows where gender is Male
+
+
+filter_cndtn = emp['Team'] == 'Finance' # make filter condition and pass it to df
+emp[filter_cndtn]
+
+emp[emp['Salary'] > 11000] ## all emp having salary > 110k
+
+emp[emp['Start Date'] == '1996-03-31']
+
+# How to get those rows from df where value of col in NaN
+
+import datetime as dt
+
+emp[emp['Last Login Time'] < dt.time(12, 0, 0)] # all emo who logged in before noon, compared only time column with time value only
+
+is_female = emp['Gender'] == 'Female'
+is_in_marketing = emp['Team'] == 'Marketing'
+
+emp[is_female & is_in_marketing] # filtering with two conditions
+
+emp[(emp['First Name'] == 'Douglas') & (emp['Salary'] == 97308)] # filter with two cndtns
+
+emp[((emp['First Name'] == 'Douglas') 
+    | (emp['First Name'] == 'Thomas'))
+    & (emp['Gender'] == 'Male')]
+
+name_cdtn = emp['First Name'] == 'Douglas'
+name_cdtn2 = emp['First Name'] == 'Thomas'
+gender_cndtn = emp['Gender'] == 'Male'
+
+emp[name_cdtn | name_cdtn2 & gender_cndtn]
+emp[(name_cdtn2 & gender_cndtn) | name_cdtn]
+
+emp[emp['Team'].isin(['Finance', 'Product', 'Sales'])]
+# or
+fil = emp['Team'].isin(['Finance', 'Product', 'Sales'])
+emp[fil]
+
+# not in 
+emp[~emp['Team'].isin(['Finance', 'Product', 'Sales'])]
+# or
+fil = ~emp['Team'].isin(['Finance', 'Product', 'Sales'])
+emp[fil]
+
+emp[emp['Team'].isnull()] # 43 rows where team is null as results
+emp[emp['Team'].notnull()]
+# or
+emp[~emp['Team'].isnull()]
+emp[~emp['Team'].notnull()] # 43 rows where team is null as results
+
 
 
 ## ---- Additonal snippets ---- ##
