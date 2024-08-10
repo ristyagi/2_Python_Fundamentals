@@ -64,17 +64,19 @@ emp.info()
 
 
 
-
 #02-------------------------------------------------------
 # Filter dataframe data based on a condtion
 
 emp = pd.read_csv("pandas/Complete/employees.csv", parse_dates = ['Start Date'], date_format = '%m/%d/%Y')
+emp
 emp.info()
 
+emp['Senior Management'].value_counts(dropna = False)
 emp['Team'].value_counts(dropna = False)
 
 emp['Last Login Time'] = pd.to_datetime(emp['Last Login Time'], format = '%H:%M %p').dt.time
-emp['Senior Management'] = emp['Senior Management'].astype('category')
+# emp['Senior Management'] = emp['Senior Management'].astype('bool') # converted senior management to bool as anyway emp where this col is NaN will not be a senior management person,but after bool it will convert to True which is not right
+emp['Senior Management'] = emp['Senior Management'].astype('category') # converting it to category will retain NaNs
 emp['Gender'] = emp['Gender'].astype('category')
 emp['Team'] = emp['Team'].astype('category')
 emp.info()
@@ -83,7 +85,90 @@ emp['Gender'].value_counts(dropna = False)
 
 emp[emp['Gender'] == 'Male'] # this will pull out only those df rows where gender is Male
 
-emp['Team'].value_counts(dropna = False)
+emp['Team'].value_counts(dropna = False) # 102 records in Finance
 emp[emp['Team'] == 'Finance'] # only 102 rows where team = Finance are pulled
+
+filter_cndtn = emp['Team'] == 'Finance' # make filter condition and pass it to df
+emp[filter_cndtn]
+
+# How to get those rows from df where value of col in NaN
+# emp[emp['Team'] == 'NaN']
+
+emp[emp['Senior Management'] == True]
+
+emp[emp['Salary'] > 11000] ## all emp having salary > 110k
+
+emp[emp['Bonus %'] <=1.1]
+
+emp[emp['Start Date'] == '1996-03-31']
+
+import datetime as dt
+
+emp[emp['Last Login Time'] < dt.time(12, 0, 0)] # all emo who logged in before noon, compared only time column with time value only
+
+
+#03-------------------------------------------------------
+# Filter dataframe with one or more conditions
+
+emp = pd.read_csv("pandas/Complete/employees.csv", parse_dates = ['Start Date'], date_format = '%m/%d/%Y')
+emp
+emp['Last Login Time'] = pd.to_datetime(emp['Last Login Time'], format = '%H:%M %p').dt.time
+emp['Senior Management'] = emp['Senior Management'].astype('bool')
+emp['Gender'] = emp['Gender'].astype('category')
+emp['Team'] = emp['Team'].astype('category')
+emp.info()
+
+
+emp['Gender'].unique()
+
+is_female = emp['Gender'] == 'Female'
+is_in_marketing = emp['Team'] == 'Marketing'
+
+emp[is_female & is_in_marketing] # filtering with two conditions
+
+# emp['First Name'].iloc[62]
+
+emp.head()
+emp.info()
+
+emp[(emp['First Name'] == 'Douglas') & (emp['Salary'] == 97308)] # filter with two cndtns
+
+emp[((emp['First Name'] == 'Douglas') 
+    | (emp['First Name'] == 'Thomas'))
+    & (emp['Gender'] == 'Male')]
+
+
+name_cdtn = emp['First Name'] == 'Douglas'
+name_cdtn2 = emp['First Name'] == 'Thomas'
+gender_cndtn = emp['Gender'] == 'Male'
+
+emp[name_cdtn | name_cdtn2 & gender_cndtn]
+emp[(name_cdtn2 & gender_cndtn) | name_cdtn]
+
+
+#04-------------------------------------------------------
+# isin and not in Method
+
+emp.info()
+ls = list(emp['Team'].unique())
+ls
+emp['Team'].value_counts(dropna = False)
+emp[~emp['Team'].isin(['Finance', 'Product', 'Sales'])]
+
+
+fil = ~emp['Team'].isin(['Finance', 'Product', 'Sales'])
+emp[fil]
+
+
+
+#05-------------------------------------------------------
+# isnull and notnull Method
+# identify all records where NaN in a columns
+
+emp[~emp['Team'].isnull()] # 43 rows where team is null as results
+emp[~emp['Team'].notnull()]
+
+emp[~emp['Team'].isnull()]
+emp[~emp['Team'].notnull()] # 43 rows where team is null as results
 
 
