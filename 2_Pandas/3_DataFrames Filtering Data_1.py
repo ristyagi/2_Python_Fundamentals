@@ -172,3 +172,18 @@ emp[~emp['Team'].isnull()]
 emp[~emp['Team'].notnull()] # 43 rows where team is null as results
 
 
+emp.info()
+
+emp['First Name'].isnull()
+emp['Team'].isnull()
+
+emp[emp['First Name'].isnull() & emp['Team'].isnull()]
+
+# emp[['First Name','Salary']] # this is not going to result same as above
+
+
+#06-------------------------------------------------------
+# between Method
+
+# to check each value of a col is between the range provided
+
