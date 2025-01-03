@@ -11,6 +11,9 @@ pd.set_option('display.max_rows', None)  # pandas setting to force terminal to d
 ## ARGUMENT is the value that we pass to a method
 ## PARAMETER 
 
+## a FUNCTION is a set of instructions that can be used repeatedly
+## while a METHOD is a function that is associated with an object
+
 df.info()
 df.describe()
 df.columns  # gives all the headers of dataframe columns as a index object
