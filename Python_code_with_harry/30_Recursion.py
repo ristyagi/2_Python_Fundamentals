@@ -87,3 +87,37 @@ fib(2)
 fib(3)
 fib(4)
 fib(5)
+
+
+#####
+"""
+x^y
+
+
+create recursive function to calculate x^y
+
+
+"""
+
+def power(x, y):
+    print('This is main fn')
+    if (x==0):
+        print('x is zero')
+        return x
+    elif (y==0 or y==1):
+        print('y is zero or one')
+        return x
+    else:
+        return x * power(x, y-1)
+    
+power(0,0)
+power(0,1)
+power(1,0)
+power(1,1)
+power(2,0)
+power(2,1)
+power(2,2)
+power(2,3)
+
+power(5,3)
+power(5,5)
